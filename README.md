@@ -1,3 +1,4 @@
 # How to run project
-##### You need to install all dependencies by writing in the console `npm install`
-##### Then write `npm start` in the console to run project
+##### Open root folder of the project in the console
+##### You need to install all dependencies by writing `npm install`
+##### Then write `npm start` to run project
