@@ -1,17 +1,12 @@
 export type LabelType = {
-    id: string
-    text: string
-    left: string
-    top: string
-    bottom: string
-}
+  id: string;
+  text: string;
+  left: string;
+  top: string;
+  bottom: string;
+};
 
 export type ClickTargetsType = {
-    prev: string
-    current: string
-}
-
-export enum ClickTargets {
-    LABEL = 'label',
-    IMG = 'img'
-}
+  prev: string;
+  current: string;
+};
