@@ -1,4 +1,4 @@
 export enum ClickTargetsEnum {
-  LABEL = 'label',
-  IMG = 'img',
+    LABEL = 'label',
+    IMG = 'img',
 }

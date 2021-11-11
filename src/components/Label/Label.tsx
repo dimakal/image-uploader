@@ -1,107 +1,92 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import './Label.scss';
-import { ClickTargetsType, LabelType } from '../../types';
+import React, { FC, useEffect, useRef, useState } from 'react'
+import { ClickTargetsType, LabelType } from '../../types'
+import { DeleteButton, LabelInput, LabelInputWrapper, LabelWrapper } from './styled'
 
 type Props = {
-  label: LabelType;
-  onSetLabelText: (id: string, newText: string) => void;
-  deleteLabel: (id: LabelType['id']) => void;
-  onSetClickTargets: (targets: ClickTargetsType) => void;
-  clickTargets: ClickTargetsType;
-};
+    label: LabelType
+    onSetLabelText: (id: string, newText: string) => void
+    deleteLabel: (id: LabelType['id']) => void
+    onSetClickTargets: (targets: ClickTargetsType) => void
+    clickTargets: ClickTargetsType
+}
 
-export const Label: FC<Props> = ({
-  label,
-  onSetLabelText,
-  deleteLabel,
-  onSetClickTargets,
-  clickTargets,
-}) => {
-  const [labelText, setLabelText] = useState<string>(label.text);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const targetsAfterAction = {
-    prev: 'label',
-    current: 'img',
-  };
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+export const Label: FC<Props> = ({ label, onSetLabelText, deleteLabel, onSetClickTargets, clickTargets }) => {
+    const [labelText, setLabelText] = useState<string>(label.text)
+    const inputRef = useRef<HTMLInputElement>(null)
+    const targetsAfterAction = {
+        prev: 'label',
+        current: 'img',
     }
 
-    return () => onSetClickTargets(targetsAfterAction);
-  }, []);
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
 
-  const handleFocus = (): void => {
-    onSetClickTargets({
-      ...clickTargets,
-      prev: clickTargets.current ? clickTargets.current : '',
-      current: 'label',
-    });
-  };
+        return () => onSetClickTargets(targetsAfterAction)
+    }, [])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = e.target.value.replace(/^\s*/, '');
-
-    setLabelText(value);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.code === 'Enter' || e.code === 'NumpadEnter') {
-      if (!labelText) {
-        onSetClickTargets(targetsAfterAction);
-      } else {
-        onSetClickTargets(targetsAfterAction);
-      }
-
-      if (inputRef.current) {
-        inputRef.current.blur();
-      }
+    const handleFocus = (): void => {
+        onSetClickTargets({
+            ...clickTargets,
+            prev: clickTargets.current ? clickTargets.current : '',
+            current: 'label',
+        })
     }
-    if (e.code === 'Escape') {
-      setLabelText(label.text);
-      if (!labelText) {
-        deleteLabel(label.id);
 
-        onSetClickTargets(targetsAfterAction);
-      }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = e.target.value.replace(/^\s*/, '')
+
+        setLabelText(value)
     }
-  };
 
-  const onBlurField = (): void => {
-    if (!labelText) {
-      deleteLabel(label.id);
-    } else {
-      onSetLabelText(label.id, labelText);
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+            if (!labelText) {
+                onSetClickTargets(targetsAfterAction)
+            } else {
+                onSetClickTargets(targetsAfterAction)
+            }
+
+            if (inputRef.current) {
+                inputRef.current.blur()
+            }
+        }
+        if (e.code === 'Escape') {
+            setLabelText(label.text)
+            if (!labelText) {
+                deleteLabel(label.id)
+
+                onSetClickTargets(targetsAfterAction)
+            }
+        }
     }
-  };
 
-  return (
-    <div
-      className="label"
-      style={{
-        left: `${label.left}`,
-        top: `${label.top}`,
-        bottom: `${label.bottom}`,
-      }}
-    >
-      <div className="label-wrapper">
-        <input
-          className="label-field"
-          type="text"
-          ref={inputRef}
-          value={labelText}
-          onChange={handleChange}
-          onBlur={onBlurField}
-          onKeyDown={handleKeyPress}
-          onFocus={handleFocus}
-        />
+    const onBlurField = (): void => {
+        if (!labelText) {
+            deleteLabel(label.id)
+        } else {
+            onSetLabelText(label.id, labelText)
+        }
+    }
 
-        <button type="button" className="label-delete" onClick={() => deleteLabel(label.id)}>
-          {' '}
-          ×{' '}
-        </button>
-      </div>
-    </div>
-  );
-};
+    return (
+        <LabelWrapper left={label.left} top={label.top} bottom={label.bottom}>
+            <LabelInputWrapper>
+                <LabelInput
+                    type="text"
+                    ref={inputRef}
+                    value={labelText}
+                    onChange={handleChange}
+                    onBlur={onBlurField}
+                    onKeyDown={handleKeyPress}
+                    onFocus={handleFocus}
+                />
+
+                <DeleteButton type="button" onClick={() => deleteLabel(label.id)}>
+                    ×
+                </DeleteButton>
+            </LabelInputWrapper>
+        </LabelWrapper>
+    )
+}
