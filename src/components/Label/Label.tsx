@@ -22,8 +22,8 @@ export const Label: FC<Props> = ({ label, onSetLabelText, deleteLabel, onSetClic
         if (inputRef.current) {
             inputRef.current.focus()
         }
-
         return () => onSetClickTargets(targetsAfterAction)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleFocus = (): void => {
